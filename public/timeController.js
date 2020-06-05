@@ -29,12 +29,6 @@ module.config(function($httpProvider) {
 
     let lastUpdated = 0;
 
-    //$scope.$listenAndDigestAsync(timefilter, 'timeUpdate', setTime);
-
-    $scope.$listen(timefilter, 'timeUpdate', () => {
-      $scope.$evalAsync(() => setTime());
-    });
-
     var changeVisOff = $rootScope.$on(
       'change:vis',
       _.debounce(updateTimeslider, 200, false));

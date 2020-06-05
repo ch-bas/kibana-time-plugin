@@ -6,20 +6,19 @@ import 'plugins/kibana-time-plugin/bower_components/bootstrap-addons/dist/css/bo
 import 'plugins/kibana-time-plugin/bower_components/bootstrap-addons/dist/js/bootstrap-addons.js';
 import 'plugins/kibana-time-plugin/time.less';
 import 'plugins/kibana-time-plugin/timeController';
-import { VisFactoryProvider } from 'ui/vis/vis_factory';
-import { VisTypesRegistryProvider } from 'ui/registry/vis_types';
 import visTemplate from 'plugins/kibana-time-plugin/time.html';
 import optionsTemplate from 'plugins/kibana-time-plugin/timeOptions.html';
+import { AngularVisController } from 'ui/vis/vis_types/angular_vis_type';
+import KbnTimeVisController  from './timeController'
 
-VisTypesRegistryProvider.register(TimeVisProvider);
+import { setup as visualizations } from '../../../src/legacy/core_plugins/visualizations/public/np_ready/public/legacy';
+import { npSetup } from 'ui/new_platform';
 
-function TimeVisProvider(Private) {
-  const VisFactory = Private(VisFactoryProvider);
-
-  return VisFactory.createAngularVisualization({
+  const timePickeerDefinition = {
     name: 'time',
     title: 'Time widget',
     icon: 'clock',
+    visualization: AngularVisController,
     description: 'Add time inputs to your dashboards.',
     visConfig: {
       template: visTemplate,
@@ -35,5 +34,7 @@ function TimeVisProvider(Private) {
     },
     requestHandler: 'none',
     responseHandler: 'none'
-  });
-}
+  };
+
+npSetup.plugins.expressions.registerFunction(timePickeerDefinition);
+visualizations.types.createBaseVisualization(timePickeerDefinition);
